@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <!-- <script src="../source/v.source.js"></script> -->
+    <script>
+      // remove splice
+      function remove(subs, sub) {
+        let idx;
+        for(i = 0; i < subs.length; i++) {
+          if(sub === subs[i]) break;
+        }
+        subs.splice(idx, 1);
+      }
+      // define property
+      function def(obj, key, val) {
+        Object.defineProperty(obj, key, {
+          value: val,
+          writable: true,
+          enumerable: true,
+          configurable: true,
+        });
+      }
+      // todo example by myself
+      // how to observe an array change
+      let $data = { arr: [1, 2] };
+      function reactive(obj, key, val, customSetter, shallow) {
+        const property = Object.getOwnPropertyDescriptor(obj, key);
+        const getter = property && property.get;
+        const setter = property && property.set;
+        if ((!getter || setter) && arguments.length === 2) {
+          val = obj[key];
+        }
+        // observe inject ob
+        let childObj = !shallow && observe(val);
+        Object.defineProperty(obj, key, {
+          enumerable: true,
+          configurable: true,
+          get() {
+            console.log('getter');
+            let value = getter ? getter.call(obj) : val;
+            if(childObj) {
+
+            }
+            return value;
+          },
+          set(newVal) {
+            console.log('setter');
+            let value = getter ? getter.call(obj) : val;
+            if (newVal === value) {
+              return;
+            }
+          },
+        });
+      }
+
+      let shouldObserve = true;
+      const hasProto = '__proto__' in {};
+      const hasOwn = Object.prototype.hasOwnProperty;
+      // observe handle
+      function observe(value) {
+        var ob;
+        if (hasOwn.call(value, '__ob__')) {
+          ob = value.__ob__;
+        } else if (shouldObserve && Array.isArray(value)) {
+          ob = new Observer(value);
+        }
+        return ob;
+      }
+
+      // array methods convert
+      const arrayProto = Array.prototype;
+      const arrayMethods = Object.create(arrayProto);
+      const methodsToPatch = ['push', 'pop', 'unshift', 'shift', 'reverse', 'splice', 'sort'];
+      methodsToPatch.forEach((method) => {
+        let original = arrayMethods[method];
+        def(arrayMethods, method, function mutator() {
+          let args = [],
+            len = arguments.length;
+          while (len--) args[len] = arguments[len];
+          let result = original.apply(this, args);
+          let ob = this.__ob__;
+          let inserted;
+          switch (method) {
+            case 'push':
+            case 'unshift':
+              inserted = args;
+              break;
+            case 'splice':
+              inserted = args[2];
+              break;
+          }
+          if (inserted) {
+            ob.observeArray(inserted);
+          }
+          // notify change
+          ob.dep.notify();
+          return result;
+        });
+      });
+      function protoAugment(target, src) {
+        target.__proto__ = src;
+      }
+      function copyAugment(target, src, keys) {
+        for (let i = 0; i < keys.length; i++) {
+          let key = keys[i];
+          def(target, key, src[key]);
+        }
+      }
+      const arrayKeys = Object.getOwnPropertyNames(arrayMethods);
+      // class Observer
+      function Observer(value) {
+        this.value = value;
+        this.dep = new Dep();
+        // __ob__
+        def(value, '__ob__', this);
+        if (Array.isArray(value)) {
+          if (hasProto) {
+            protoAugment(value, arrayMethods);
+          } else {
+            copyAugment(value, arrayMethods, arrayKeys);
+          }
+          this.observeArray(value);
+        } else {
+          this.walk(value);
+        }
+      }
+      Observer.prototype.walk = function walk(value) {
+        const keys = Object.keys(value);
+        for (let i = 0; i < keys.length; i++) {
+          reactive(value, keys[i]);
+        }
+      };
+      Observer.prototype.observeArray = function observeArray(items) {
+        for (let i = 0; i < items.length; i++) {
+          observe(items[i]);
+        }
+      };
+
+      // class Dep
+      let uid = 0;
+      function Dep() {
+        this.id = uid++;
+        this.subs = [];
+      }
+      Dep.prototype.addSub = function addSub(sub) {
+        this.subs.push(sub);
+      }
+      Dep.prototype.removeSub = function removeSub(sub) {
+        remove(this.subs, sub);
+      }
+      Dep.prototype.depend = function depend() {
+        if(Dep.target) {
+          Dep.target.addDep(this);
+        }
+      }
+      Dep.prototype.notify = function notify() {
+        let subs = this.subs.slice();
+        for(let i = 0; i < subs.length; i++) {
+          subs[i].update();
+        }
+      }
+      Dep.target = null;
+      let targetStack = [];
+      function pushTarget(target) {
+        targetStack.push(target);
+        Dep.target = target;
+      }
+      function popTarget() {
+        targetStack.pop();
+        Dep.target = targetStack[targetStack.length - 1];
+      }
+
+      // observe data
+      function initData(data) {
+        const keys = Object.keys(data);
+        for (let i = 0; i < keys.length; i++) {
+          reactive(data, keys[i]);
+        }
+      }
+
+      // test
+      initData($data);
+    </script>
+  </body>
+</html>

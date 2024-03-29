@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+<body>
+  <div id="root">
+    <button @click="handleClick">outer click {{ count }}</button>
+    <hello-world></hello-world>
+  </div>
+  <script src="../source/v.source.js"></script>
+  <script>
+    new Vue({
+      el: '#root',
+      components: {
+        'hello-world': {
+          data() {
+            return {
+              count: 1,
+            };
+          },
+          methods: {
+            onClick() {
+              this.count++;
+            },
+          },
+          render(h) {
+            return h('button', {
+              on: {
+                click: this.onClick,
+              }
+            }, 'inner click ' + this.count)
+          },
+        },
+      },
+      data() {
+        return {
+          count: 0,
+        };
+      },
+      methods: {
+        handleClick() {
+          this.count++;
+        },
+      },
+    })
+  </script>
+</body>
+</html>

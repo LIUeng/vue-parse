@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <div id="app"></div>
+    <script src="../handjs//tools.js"></script>
+    <script src="../handjs/VNode.js"></script>
+    <script src="../handjs/parse.js"></script>
+    <script>
+        let vm = new Mvvm({
+            el: '#app',
+            template: `<div :class="className">label：<input type="text" v-model="val" /><div>result: {{val}} {{val + 1}}</div></div>`,
+            data() {
+                return {
+                    val: 1,
+                    className: 'container',
+                };
+            },
+        })
+        console.log('mvmvmvmvmvmvmvmvmmvvm', vm);
+    </script>
+</body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root">
+      <!-- <div :class="className"> -->
+      <!-- label：<input type="text" v-model="val" />
+        <div>result: {{val + 1}} {{ val }}</div> -->
+      <div v-for="item in keys" :key="item">{{ item }}</div>
+      <div>count: {{ count }}</div>
+      <button @click="minus">-</button>
+      <button @click="add">+</button>
+      <button @click="clear">clear</button>
+      <button @click="push">push</button>
+      <button @click="unshift">unshift</button>
+      <!-- <hello-world :data="keys"></hello-world> -->
+      <!-- </div> -->
+    </div>
+    <script src="../source/v.source.js"></script>
+    <script>
+      Vue.component('hello-world', {
+        template: '<div class="hello">i am hello world component, {{ data.join(",") }}</div>',
+        props: {
+          data: {
+            type: Array,
+            default: () => [],
+          },
+        },
+      });
+
+      let vm = new Vue({
+        el: '#root',
+        // template: '<div :class="className">label：<input type="text" v-model="val" /><div>result: {{val + 1}} {{ val }}</div></div>',
+        data() {
+          return {
+            // val: 1,
+            // className: 'container',
+            keys: [1, 2, 3, 4],
+            count: 5,
+          };
+        },
+        methods: {
+          minus() {
+            this.keys.splice(0, 1);
+          },
+          add() {
+            this.keys.splice(this.keys.length, 0, this.count++)
+          },
+          clear() {
+            this.keys = [];
+          },
+          push() {
+            // this.keys.push(this.count++);
+            this.keys.push(88);
+          },
+          unshift() {
+            this.keys.unshift();
+          },
+        },
+      });
+      console.log('vue vm: ', vm);
+    </script>
+  </body>
+</html>

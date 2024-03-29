@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div id="root">{{count}} <button @click="handleClick">click me</button></div>
+    <script src="../source/v.source.js"></script>
+    <script>
+      let vm = new Vue({
+        el: '#root',
+        watch: {
+          count() {
+            console.log('data count has changed');
+          },
+          state() {
+            console.log('data state has changed');
+          },
+        },
+        data() {
+          return {
+            count: 0,
+            state: true,
+          };
+        },
+        methods: {
+          handleClick() {
+            this.count++;
+          },
+        },
+      });
+    </script>
+  </body>
+</html>

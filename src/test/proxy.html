@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      let arr = [1, 2];
+
+      let func = function (a, b, c) {
+        console.log(a, b, c);
+        return a + b + c;
+      };
+
+      let handler = {
+        apply(target, thisArgs, ...args) {
+          console.log('apply', thisArgs, args);
+          return Reflect.apply(target, thisArgs, ...args);
+        },
+
+        get(target, prop, receiver) {
+          console.log('get', prop);
+          return Reflect.get(target, prop, receiver);
+        },
+
+        set(target, prop, value) {
+          console.log('set', prop, value);
+          return Reflect.set(target, prop, value);
+        },
+
+        ownKeys(target) {
+          console.log('own keys');
+          return Reflect.ownKeys(target);
+        },
+
+        has(target, prop) {
+          console.log('has');
+          return Reflect.has(target, prop);
+        },
+      };
+
+      let proxy = new Proxy(arr, handler);
+      let func_proxy = new Proxy(func, handler);
+    </script>
+  </body>
+</html>
