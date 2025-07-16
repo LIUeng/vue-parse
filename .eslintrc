@@ -18,5 +18,5 @@
         "node": true,
         "es6": true
     },
-    "ignorePatterns": ["html/*.js", "source/*.js", "js/*.js"]
+    "ignorePatterns": ["html/*.js", "src/source/*.js", "js/*.js", "**/test/*.js"]
 }

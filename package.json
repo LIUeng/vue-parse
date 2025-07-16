@@ -19,5 +19,8 @@
   "homepage": "https://github.com/LIUeng/vue-parse#readme",
   "devDependencies": {
     "eslint": "^7.4.0"
+  },
+  "dependencies": {
+    "vue": "^2.6.14"
   }
 }
