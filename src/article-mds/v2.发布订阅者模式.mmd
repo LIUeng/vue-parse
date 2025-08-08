@@ -1,0 +1,44 @@
+---
+config:
+  theme: forest
+  look: neo
+---
+classDiagram
+direction TB
+  note "pushTarget(Watcher)"
+  note "popTarget"
+  class Observer {
+    value: any
+    dep: Dep
+    walk() 监听基本类型值
+    observeArray() 监听数组
+  }
+  class Watcher {
+    dirty: boolean
+    lazy: boolean
+    value: any
+    ...
+    deps: []
+    depIds: Set
+    newDeps: []
+    newDepIds: Set
+    fn: 同步执行函数
+    cb: 微任务执行队列
+    get()
+    addDep()
+    cleanupDeps()
+    update()
+    depend()
+    run()
+    evaluate()
+  }
+  class Dep {
+    static target: null
+    uid: number
+    subs: []
+    addSub()
+    removeSub()
+    depend()
+    notify()
+  }
+	
