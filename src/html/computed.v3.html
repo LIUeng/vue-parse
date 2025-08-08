@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../articles/computed.v3.js"></script>
+    <script>
+        const app = Vue.createApp({
+            data() {
+                return {
+                    msg: 'hello',
+                };
+            },
+            computed: {
+                c_msg({ msg }) {
+                    console.log('compute vvvv', msg);
+                    return msg + 1;
+                },
+            },
+            render() {
+                console.log('render', this.msg);
+                this.msg = 'world'
+
+                console.log(this.c_msg);
+
+                setTimeout(() => {
+                    console.log('timeout')
+                    this.msg = 'championship';
+                    console.log(this.c_msg);
+                }, 4e3)
+            },
+        });
+
+        app.mount();
+
+        console.log(app);
+    </script>
+</body>
+
+</html>

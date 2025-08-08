@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="../articles/computed.v2.js"></script>
+    <script>
+        // test
+        let flag = false;
+        const app = new Vue({
+            data() {
+                return {
+                    a: 1,
+                };
+            },
+            computed: {
+                ca({ a }) {
+                    console.log('computed', a);
+                    return a;
+                },
+            },
+            render() {
+                console.log('---------render-----------');
+
+                console.log(this.a);
+                console.log(this.a);
+                console.log(this.a);
+
+                // if (!flag) {
+                //     flag = true;
+                //     setTimeout(() => {
+                //         this.a = 4;
+                //     }, 3e3);
+                // }
+
+                return this.a;
+            },
+        });
+
+        app.$mount();
+    </script>
+</body>
+
+</html>

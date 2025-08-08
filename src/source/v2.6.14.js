@@ -719,6 +719,7 @@
   };
 
   Dep.prototype.addSub = function addSub (sub) {
+    console.log('sub', sub)
     this.subs.push(sub);
   };
 
@@ -4478,6 +4479,7 @@
         );
       }
     }
+    console.log('lazy', this.lazy);
     this.value = this.lazy
       ? undefined
       : this.get();
@@ -4487,6 +4489,7 @@
    * Evaluate the getter, and re-collect dependencies.
    */
   Watcher.prototype.get = function get () {
+    console.log('get', this.getter);
     pushTarget(this);
     var value;
     var vm = this.vm;
@@ -8159,7 +8162,6 @@
 
   function enter (vnode, toggleDisplay) {
     var el = vnode.elm;
-    console.log('enter');
 
     // call leave callback now
     if (isDef(el._leaveCb)) {
@@ -8310,7 +8312,6 @@
   }
 
   function leave (vnode, rm) {
-    console.log('leave')
     var el = vnode.elm;
 
     // call enter callback now

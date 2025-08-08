@@ -529,6 +529,7 @@ var Vue = (function (exports) {
       if (!this.active) {
         return this.fn();
       }
+      console.log('run')
       let lastShouldTrack = shouldTrack;
       let lastEffect = activeEffect;
       try {
@@ -571,6 +572,7 @@ var Vue = (function (exports) {
   function cleanupDepEffect(dep, effect2) {
     const trackId = dep.get(effect2);
     if (trackId !== void 0 && effect2._trackId !== trackId) {
+      console.log('cleanup dep effect', trackId)
       dep.delete(effect2);
       if (dep.size === 0) {
         dep.cleanup();
@@ -657,6 +659,7 @@ var Vue = (function (exports) {
         if ((!effect2._runnings || effect2.allowRecurse) && effect2._dirtyLevel !== 2) {
           effect2._shouldSchedule = false;
           if (effect2.scheduler) {
+            console.log('scheduler')
             queueEffectSchedulers.push(effect2.scheduler);
           }
         }

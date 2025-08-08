@@ -1,0 +1,49 @@
+---
+config:
+  theme: forest
+  layout: dagre
+---
+flowchart TB
+    A["初始化阶段"] -- "定义响应式数据(Observer)每个属性实例化 dep = new Dep() 等待消费订阅" --- B["实例化 watcher = new Watcher(fn, cb)"]
+    B --> C["执行 watcher.get()"]
+    C --> D["pushTarget(watcher)"]
+    D --> E["执行初始化函数"]
+    E --> F{"获取响应式数据"}
+    F -- "是 this.x" --> G["触发响应式"]
+    F -- 否 --> H["执行函数，不触发响应式"]
+    G -- "每一个 data 响应式属性被定义，添加订阅者 dep = new Dep(), get 触发:<br>dep.depend()<br>Dep.target.addDep()<br>dep.addSub[watcher]" --- J["watcher 实例中得到 deps -> subs[watcher]"]
+    H --> K["popTarget"]
+    J --> K
+    K --> M["cleanupDeps 交换并重置 deps"]
+    M --> N["结束"]
+    A1["更新阶段"] --> B1["data set: this.x = newValue"]
+    B1 --> C1["触发响应式 dep.notify() 通知更新"]
+    C1 -- "初始阶段实例化 watcher 时添加的订阅者 subs: watcher[] 执行 watcher.update" --- D1["执行重新渲染（微任务）"]
+    D1 --> C
+    A2["Computed 渲染"] --> B2["每个属性实例化 watcher = new Watcher(lazy = true)"]
+    B2 -- 定义响应式 get --- C2["获取值, 触发 watcher.evaluate() 更新值, 添加订阅者 watcher.depend()"]
+    C2 --> D2["等待下一次更新"]
+    D2 --> C
+    A0["响应式渲染"]
+    A0@{ shape: display}
+    style A0 color:#FFFFFF,fill:#00C853,stroke-width:4px,stroke-dasharray: 0,stroke:#FFFFFF
+    linkStyle 0 stroke:#FFD600,fill:none
+    linkStyle 1 stroke:#FFD600,fill:none
+    linkStyle 2 stroke:#FFD600,fill:none
+    linkStyle 3 stroke:#FFD600,fill:none
+    linkStyle 4 stroke:#FFD600,fill:none
+    linkStyle 5 stroke:#FFD600,fill:none
+    linkStyle 6 stroke:#FFD600,fill:none
+    linkStyle 7 stroke:#FFD600,fill:none
+    linkStyle 8 stroke:#FFD600,fill:none
+    linkStyle 9 stroke:#FFD600,fill:none
+    linkStyle 10 stroke:#FFD600,fill:none
+    linkStyle 11 stroke:#FFD600,fill:none
+    linkStyle 12 stroke:#FFD600,fill:none
+    linkStyle 13 stroke:#FFD600,fill:none
+    linkStyle 14 stroke:#FFD600,fill:none
+    linkStyle 15 stroke:#FFD600,fill:none
+    linkStyle 16 stroke:#FFD600,fill:none
+    linkStyle 17 stroke:#FFD600,fill:none
+    linkStyle 18 stroke:#FFD600,fill:none
+    linkStyle 19 stroke:#FFD600,fill:none
