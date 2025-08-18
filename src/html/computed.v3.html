@@ -8,37 +8,33 @@
 </head>
 
 <body>
-    <script src="../articles/computed.v3.js"></script>
+    <div id="root"></div>
+    <script src="../articles/reactive.v3.js"></script>
     <script>
+        const { ref, computed } = Vue;
+        // 响应式数据声明
+        const msg = ref({ a: 1 });
+        // 计算属性
+        const c_msg = computed(() => {
+            return msg.value.a + ' world';
+        });
+        // 初始化
         const app = Vue.createApp({
-            data() {
+            setup() {
                 return {
-                    msg: 'hello',
+                    msg,
+                    c_msg,
                 };
             },
-            computed: {
-                c_msg({ msg }) {
-                    console.log('compute vvvv', msg);
-                    return msg + 1;
-                },
-            },
             render() {
-                console.log('render', this.msg);
-                this.msg = 'world'
-
-                console.log(this.c_msg);
-
-                setTimeout(() => {
-                    console.log('timeout')
-                    this.msg = 'championship';
-                    console.log(this.c_msg);
-                }, 4e3)
+                // msg.value.a = 'hello'
+                // console.log('render', msg.value);
+                document.getElementById('root').textContent = c_msg.value;
+                console.log('---------------render---------------');
             },
         });
-
+        // 渲染
         app.mount();
-
-        console.log(app);
     </script>
 </body>
 

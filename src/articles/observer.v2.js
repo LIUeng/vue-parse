@@ -622,7 +622,7 @@ function flushSchedulerQueue() {
   console.log(queue.slice());
 
   for (index = 0; index < queue.length; index++) {
-    watcher = queue[index];
+    let watcher = queue[index];
     let id = watcher.id;
     has[id] = null;
     watcher.run();

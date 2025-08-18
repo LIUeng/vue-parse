@@ -11,59 +11,34 @@
 <body>
   <div id="app">
     <button @click="handleClick">click me</button>
-    {{ msg }} {{ msg1 }}
+    {{ msg }}
   </div>
 
   <script src="../source/v3.4.27.js"></script>
   <script>
-    let flag = false;
-    let app = Vue.createApp({
-      data() {
+    const { ref, computed } = Vue;
+    // 响应式数据声明
+    const msg = ref({ a: '' });
+    // 计算属性
+    const c_msg = computed(() => {
+      return msg.value.a + ' world';
+    });
+    // 初始化
+    const app = Vue.createApp({
+      setup() {
         return {
-          // $msg: 'www',
-          msg: 'hello',
-          msg1: 'world',
+          msg,
+          c_msg,
         };
       },
-      computed: {
-        c_msg({ msg }) {
-          return msg + 'championShip';
-        },
+      render() {
+        // msg.value.a = 'hello';
+        console.log('---------------render----------------');
+        return c_msg.value;
       },
-      methods: {
-        handleClick() {
-          this.msg = 'hello1 ';
-          this.msg1 = 'world1'
-        },
-      },
-      // render() {
-      //   console.log('render', 'xxxxxxxx');
-      //   this.msg = 'hello'
-      //   if (!flag) {
-      //     setTimeout(() => {
-      //       flag = true;
-      //       console.log('timeout')
-      //       this.msg = 'what? '
-      //       console.log(this.c_msg)
-      //     }, 4e3)
-      //   }
-      //   return this.c_msg;
-      // },
-      // setup() {
-      //   let msg = Vue.ref('hello');
-      //   function handleClick() {
-      //     msg.value = 'world';
-      //   }
-      //   return {
-      //     msg,
-      //     handleClick,
-      //   };
-      // },
     });
-
+    // 渲染
     app.mount('#app');
-
-    console.log(app);
   </script>
 </body>
 

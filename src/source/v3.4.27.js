@@ -1876,6 +1876,7 @@ getter: `, this.getter);
     return start;
   }
   function queueJob(job) {
+    console.log('job', job);
     if (!queue.length || !queue.includes(
       job,
       isFlushing && job.allowRecurse ? flushIndex + 1 : flushIndex
@@ -7635,6 +7636,7 @@ Server rendered element contains fewer child nodes than client vdom.`
         // track it in component's effect scope
       );
       const update = instance.update = () => {
+        console.log('update effect dirty value:', effect.dirty);
         if (effect.dirty) {
           effect.run();
         }
